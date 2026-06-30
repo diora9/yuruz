@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>YurUz</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    --terracotta:#D85A30;
+    --terracotta-dark:#993C1D;
+    --turquoise:#1D9E75;
+    --turquoise-dark:#0F6E56;
+    --sand:#FAF6EF;
+    --ink:#2C2C2A;
+    --ink-soft:#6B6A64;
+    --line:#E8E2D6;
+    --card:#FFFFFF;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--sand);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:90px;
+  }
+  .hidden{display:none !important;}
+
+  /* HEADER */
+  header{
+    padding:20px 18px 14px;
+    background:var(--sand);
+    position:sticky;top:0;z-index:10;
+  }
+  .brand{
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;
+  }
+  .brand-mark{
+    width:34px;height:34px;border-radius:10px;
+    background:var(--terracotta);
+    display:flex;align-items:center;justify-content:center;
+    color:white;font-weight:700;font-size:16px;
+  }
+  .brand-name{font-size:19px;font-weight:700;letter-spacing:-0.3px;}
+  .brand-tag{font-size:12px;color:var(--ink-soft);margin-left:auto;}
+  .search-bar{
+    display:flex;align-items:center;gap:8px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:11px 14px;
+  }
+  .search-bar input{
+    border:none;outline:none;background:transparent;
+    font-size:14px;width:100%;color:var(--ink);
+  }
+  .search-bar input::placeholder{color:#B6B2A6;}
+
+  /* TABS */
+  .tabs{
+    display:flex;gap:8px;padding:14px 18px 0;
+  }
+  .tab{
+    flex:1;text-align:center;padding:11px 0;
+    border-radius:12px;font-size:14px;font-weight:600;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .tab.active{
+    background:var(--ink);
+    color:white;
+    border-color:var(--ink);
+  }
+
+  /* CATEGORY CHIPS */
+  .chips{
+    display:flex;gap:8px;overflow-x:auto;padding:14px 18px 4px;
+    scrollbar-width:none;
+  }
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;padding:8px 14px;border-radius:20px;
+    font-size:13px;font-weight:600;white-space:nowrap;
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .chip.active{
+    background:var(--turquoise);color:white;border-color:var(--turquoise);
+  }
+
+  /* LIST */
+  .section-title{
+    font-size:13px;font-weight:700;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:0.5px;
+    padding:18px 18px 8px;
+  }
+  .list{padding:0 18px;display:flex;flex-direction:column;gap:12px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    cursor:pointer;
+    display:flex;
+    transition:transform .12s ease;
+  }
+  .card:active{transform:scale(0.98);}
+  .card-img{
+    width:96px;height:96px;flex:0 0 96px;
+    background-size:cover;background-position:center;
+  }
+  .card-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;}
+  .card-title{font-size:15px;font-weight:700;line-height:1.2;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .card-meta{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;}
+  .card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+  .card-price{font-size:14px;font-weight:700;color:var(--terracotta-dark);}
+  .card-rating{
+    font-size:12px;font-weight:600;color:var(--turquoise-dark);
+    display:flex;align-items:center;gap:3px;
+  }
+  .badge{
+    display:inline-block;font-size:10.5px;font-weight:700;
+    padding:2px 7px;border-radius:6px;
+    background:#F2EEE3;color:var(--ink-soft);
+    width:fit-content;
+  }
+
+  /* DETAIL VIEW */
+  #detail{
+    position:fixed;inset:0;background:var(--sand);z-index:50;
+    overflow-y:auto;
+  }
+  .detail-hero{
+    height:240px;background-size:cover;background-position:center;
+    position:relative;
+  }
+  .back-btn{
+    position:absolute;top:18px;left:16px;
+    width:36px;height:36px;border-radius:50%;
+    background:rgba(255,255,255,0.92);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:700;cursor:pointer;
+  }
+  .detail-body{padding:20px 20px 110px;}
+  .detail-title{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-0.3px;}
+  .detail-meta{font-size:13.5px;color:var(--ink-soft);margin-bottom:16px;}
+  .detail-stats{
+    display:flex;gap:10px;margin-bottom:18px;
+  }
+  .stat-pill{
+    flex:1;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:10px 12px;text-align:center;
+  }
+  .stat-pill .v{font-size:15px;font-weight:700;}
+  .stat-pill .l{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+  .detail-section{margin-bottom:18px;}
+  .detail-section h3{font-size:14px;font-weight:700;margin-bottom:6px;}
+  .detail-section p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .gallery{display:flex;gap:8px;overflow-x:auto;margin-top:6px;}
+  .gallery div{width:88px;height:88px;border-radius:10px;flex:0 0 88px;background-size:cover;background-position:center;}
+
+  .cta-bar{
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--card);border-top:1px solid var(--line);
+    padding:14px 20px calc(14px + env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:14px;
+    z-index:51;
+  }
+  .cta-price{flex:0 0 auto;}
+  .cta-price .v{font-size:17px;font-weight:800;}
+  .cta-price .l{font-size:11px;color:var(--ink-soft);}
+  .cta-btn{
+    flex:1;background:var(--terracotta);color:white;
+    border:none;border-radius:14px;padding:15px;
+    font-size:15px;font-weight:700;cursor:pointer;
+  }
+  .cta-btn:active{background:var(--terracotta-dark);}
+
+  /* BOOKING CONFIRM */
+  #confirm{
+    position:fixed;inset:0;background:rgba(44,44,42,0.45);
+    z-index:60;display:flex;align-items:flex-end;
+  }
+  .sheet{
+    background:var(--card);width:100%;border-radius:20px 20px 0 0;
+    padding:24px 22px calc(24px + env(safe-area-inset-bottom));
+    text-align:center;
+  }
+  .sheet .icon{
+    width:56px;height:56px;border-radius:50%;background:#E1F5EE;
+    color:var(--turquoise-dark);font-size:26px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+  }
+  .sheet h2{font-size:17px;font-weight:800;margin-bottom:6px;}
+  .sheet p{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;line-height:1.5;}
+  .sheet button{
+    width:100%;padding:14px;border-radius:14px;border:none;
+    background:var(--ink);color:white;font-weight:700;font-size:14.5px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">Y</div>
+    <div class="brand-name">YurUz</div>
+    <div class="brand-tag">Tashkent</div>
+  </div>
+  <div class="search-bar">
+    <span>🔍</span>
+    <input id="searchInput" placeholder="Search events or organizers" />
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="events">Events</div>
+  <div class="tab" data-tab="organizers">Organizers</div>
+</div>
+
+<div class="chips" id="chips"></div>
+
+<div class="section-title" id="sectionTitle">Happening this month</div>
+<div class="list" id="list"></div>
+
+<!-- DETAIL -->
+<div id="detail" class="hidden"></div>
+
+<!-- CONFIRM SHEET -->
+<div id="confirm" class="hidden">
+  <div class="sheet">
+    <div class="icon">✓</div>
+    <h2>Booking request sent</h2>
+    <p>The organizer will confirm availability and pricing with you directly in this chat within a few hours.</p>
+    <button onclick="closeConfirm()">Done</button>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+if(tg){ tg.ready(); tg.expand(); }
+
+const EVENT_CATEGORIES = ["All","Concerts","Tours","Festivals","Sports","Workshops"];
+const ORG_CATEGORIES = ["All","Wedding","Corporate","Birthday","Photo & Video","Catering","Decor"];
+
+const EVENTS = [
+  {id:"e1",title:"Silk Road Music Night",cat:"Concerts",city:"Tashkent",date:"Jul 12",price:"120,000 UZS",rating:4.8,
+   img:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400",
+   desc:"An evening of contemporary Uzbek and regional artists performing live in an open-air amphitheater. Food trucks and local craft stalls open from 6pm."},
+  {id:"e2",title:"Samarkand Heritage Tour",cat:"Tours",city:"Samarkand",date:"Jul 18",price:"350,000 UZS",rating:4.9,
+   img:"https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400",
+   desc:"Full-day guided tour of Registan Square, Gur-e-Amir, and Shah-i-Zinda with a licensed local historian. Lunch and transport from Tashkent included."},
+  {id:"e3",title:"Tashkent Food Festival",cat:"Festivals",city:"Tashkent",date:"Jul 20",price:"Free entry",rating:4.6,
+   img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400",
+   desc:"Two-day street food festival featuring 40+ local vendors, live cooking demos, and family activities at Magic City Park."},
+  {id:"e4",title:"Chimgan Trail Run",cat:"Sports",city:"Chimgan",date:"Jul 26",price:"80,000 UZS",rating:4.7,
+   img:"https://images.unsplash.com/photo-1551632811-561732d1e306?w=400",
+   desc:"10K and 21K mountain trail run with marked routes, water stations, and finisher medals. Bus transfer from Tashkent available."},
+  {id:"e5",title:"Startup Pitch Workshop",cat:"Workshops",city:"Tashkent",date:"Aug 2",price:"50,000 UZS",rating:4.5,
+   img:"https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400",
+   desc:"Hands-on workshop on building and delivering investor pitches, led by founders from the local startup ecosystem."},
+];
+
+const ORGANIZERS = [
+  {id:"o1",title:"Bahor Wedding Studio",cat:"Wedding",city:"Tashkent",date:"From 8,000,000 UZS",price:"4.9 (210 events)",rating:4.9,
+   img:"https://images.unsplash.com/photo-1519741497674-611481863552?w=400",
+   desc:"Full-service wedding planning: venue sourcing, decor, catering coordination, and day-of management. 8 years organizing weddings across Tashkent."},
+  {id:"o2",title:"Nova Corporate Events",cat:"Corporate",city:"Tashkent",date:"From 5,000,000 UZS",price:"4.8 (95 events)",rating:4.8,
+   img:"https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400",
+   desc:"Conferences, product launches, and team offsites. In-house AV, staging, and catering partners for events up to 500 guests."},
+  {id:"o3",title:"Sayyora Kids Parties",cat:"Birthday",city:"Tashkent",date:"From 1,200,000 UZS",price:"5.0 (340 events)",rating:5.0,
+   img:"https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400",
+   desc:"Themed birthday parties for kids with entertainers, decor, and cake included. Most popular vendor on YurUz for family events."},
+  {id:"o4",title:"Lens & Light Studio",cat:"Photo & Video",city:"Tashkent",date:"From 900,000 UZS",price:"4.7 (180 events)",rating:4.7,
+   img:"https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400",
+   desc:"Photo and videography for weddings, toy, and corporate events. Same-week edited highlight reel delivery."},
+  {id:"o5",title:"Dastархон Catering",cat:"Catering",city:"Tashkent",date:"From 60,000 UZS / guest",price:"4.6 (260 events)",rating:4.6,
+   img:"https://images.unsplash.com/photo-1555244162-803834f70033?w=400",
+   desc:"Traditional and modern Uzbek menus for events of any size, from intimate gatherings to 500-guest celebrations."},
+];
+
+let state = { tab:"events", category:"All", query:"" };
+
+function renderChips(){
+  const cats = state.tab === "events" ? EVENT_CATEGORIES : ORG_CATEGORIES;
+  document.getElementById("chips").innerHTML = cats.map(c =>
+    `<div class="chip ${c===state.category?'active':''}" onclick="setCategory('${c}')">${c}</div>`
+  ).join("");
+}
+
+function setCategory(c){ state.category = c; renderChips(); renderList(); }
+
+function setTab(t){
+  state.tab = t; state.category = "All";
+  document.querySelectorAll(".tab").forEach(el=>el.classList.toggle("active", el.dataset.tab===t));
+  document.getElementById("sectionTitle").textContent = t==="events" ? "Happening this month" : "Top-rated organizers";
+  renderChips(); renderList();
+}
+
+function renderList(){
+  const data = state.tab === "events" ? EVENTS : ORGANIZERS;
+  const filtered = data.filter(item=>{
+    const matchCat = state.category==="All" || item.cat===state.category;
+    const matchQuery = item.title.toLowerCase().includes(state.query.toLowerCase());
+    return matchCat && matchQuery;
+  });
+  const list = document.getElementById("list");
+  if(filtered.length===0){
+    list.innerHTML = `<div style="text-align:center;color:var(--ink-soft);font-size:13.5px;padding:40px 0;">No results. Try another category.</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(item => `
+    <div class="card" onclick="openDetail('${item.id}')">
+      <div class="card-img" style="background-image:url('${item.img}')"></div>
+      <div class="card-body">
+        <span class="badge">${item.cat}</span>
+        <div class="card-title">${item.title}</div>
+        <div class="card-meta">📍 ${item.city} · ${item.date}</div>
+        <div class="card-bottom">
+          <div class="card-price">${item.price}</div>
+          <div class="card-rating">★ ${item.rating}</div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function openDetail(id){
+  const data = state.tab === "events" ? EVENTS : ORGANIZERS;
+  const item = data.find(d=>d.id===id);
+  const isOrg = state.tab === "organizers";
+  document.getElementById("detail").innerHTML = `
+    <div class="detail-hero" style="background-image:url('${item.img}')">
+      <div class="back-btn" onclick="closeDetail()">←</div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-title">${item.title}</div>
+      <div class="detail-meta">📍 ${item.city} · ${item.cat}${isOrg ? '' : ' · ' + item.date}</div>
+      <div class="detail-stats">
+        <div class="stat-pill"><div class="v">★ ${item.rating}</div><div class="l">Rating</div></div>
+        <div class="stat-pill"><div class="v">${isOrg ? item.price.split(' ')[0] : item.date}</div><div class="l">${isOrg ? 'Reviews' : 'Date'}</div></div>
+        <div class="stat-pill"><div class="v">${isOrg ? 'Verified' : 'Open'}</div><div class="l">Status</div></div>
+      </div>
+      <div class="detail-section">
+        <h3>About</h3>
+        <p>${item.desc}</p>
+      </div>
+      <div class="detail-section">
+        <h3>Gallery</h3>
+        <div class="gallery">
+          <div style="background-image:url('${item.img}')"></div>
+          <div style="background-image:url('${item.img}')"></div>
+          <div style="background-image:url('${item.img}')"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar">
+      <div class="cta-price">
+        <div class="v">${item.price}</div>
+        <div class="l">${isOrg ? 'starting price' : 'per ticket'}</div>
+      </div>
+      <button class="cta-btn" onclick="book('${item.id}')">${isOrg ? 'Request booking' : 'Book ticket'}</button>
+    </div>
+  `;
+  document.getElementById("detail").classList.remove("hidden");
+}
+
+function closeDetail(){ document.getElementById("detail").classList.add("hidden"); }
+
+function book(id){
+  if(tg && tg.sendData){
+    tg.sendData(JSON.stringify({action:"book", id:id, tab:state.tab}));
+  }
+  document.getElementById("confirm").classList.remove("hidden");
+}
+function closeConfirm(){
+  document.getElementById("confirm").classList.add("hidden");
+  closeDetail();
+}
+
+document.querySelectorAll(".tab").forEach(el=>{
+  el.addEventListener("click", ()=> setTab(el.dataset.tab));
+});
+document.getElementById("searchInput").addEventListener("input", e=>{
+  state.query = e.target.value; renderList();
+});
+
+renderChips();
+renderList();
+</script>
+</body>
+</html>
