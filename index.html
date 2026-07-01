@@ -1,400 +1,1401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <title>YurUz</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --terracotta:#D85A30;
-    --terracotta-dark:#993C1D;
-    --turquoise:#1D9E75;
-    --turquoise-dark:#0F6E56;
-    --sand:#FAF6EF;
-    --ink:#2C2C2A;
-    --ink-soft:#6B6A64;
-    --line:#E8E2D6;
-    --card:#FFFFFF;
-    --radius:16px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    background:var(--sand);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:90px;
-  }
-  .hidden{display:none !important;}
+:root{
+  --navy:#16213A;
+  --navy2:#1E2D4F;
+  --navy3:#243459;
+  --green:#2CC76A;
+  --green2:#22A355;
+  --green3:#19833F;
+  --green-glow:rgba(44,199,106,0.18);
+  --green-soft:#E7F9EE;
+  --bg:#F0F3F8;
+  --card:#FFFFFF;
+  --ink:#16213A;
+  --ink2:#4B5775;
+  --ink3:#9BA8BF;
+  --line:#E4E9F2;
+  --women:#6D28D9;
+  --women2:#7C3AED;
+  --women-soft:#F0EBFF;
+  --r:14px;
+  --r2:20px;
+  --nav:66px;
+  --safe:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;font-family:'Inter',system-ui,sans-serif;}
+body{background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
 
-  /* HEADER */
-  header{
-    padding:20px 18px 14px;
-    background:var(--sand);
-    position:sticky;top:0;z-index:10;
-  }
-  .brand{
-    display:flex;align-items:center;gap:8px;margin-bottom:14px;
-  }
-  .brand-mark{
-    width:34px;height:34px;border-radius:10px;
-    background:var(--terracotta);
-    display:flex;align-items:center;justify-content:center;
-    color:white;font-weight:700;font-size:16px;
-  }
-  .brand-name{font-size:19px;font-weight:700;letter-spacing:-0.3px;}
-  .brand-tag{font-size:12px;color:var(--ink-soft);margin-left:auto;}
-  .search-bar{
-    display:flex;align-items:center;gap:8px;
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:11px 14px;
-  }
-  .search-bar input{
-    border:none;outline:none;background:transparent;
-    font-size:14px;width:100%;color:var(--ink);
-  }
-  .search-bar input::placeholder{color:#B6B2A6;}
+/* ─── SCREENS ─── */
+.screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.screen.off{display:none;}
 
-  /* TABS */
-  .tabs{
-    display:flex;gap:8px;padding:14px 18px 0;
-  }
-  .tab{
-    flex:1;text-align:center;padding:11px 0;
-    border-radius:12px;font-size:14px;font-weight:600;
-    border:1px solid var(--line);
-    background:var(--card);
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .tab.active{
-    background:var(--ink);
-    color:white;
-    border-color:var(--ink);
-  }
+/* ════════════════════════════════════
+   ONBOARDING
+════════════════════════════════════ */
+#ob{
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 60%,#1a3a5c 100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+.ob-top{
+  padding:56px 28px 0;display:flex;flex-direction:column;align-items:center;width:100%;
+}
+.ob-logo-wrap{margin-bottom:12px;}
+.ob-logo-wrap img{width:130px;height:auto;}
+.ob-logo-text{
+  font-size:32px;font-weight:900;letter-spacing:-1px;
+  display:flex;align-items:center;gap:0;
+}
+.ob-logo-text span:first-child{color:#fff;}
+.ob-logo-text span:last-child{color:var(--green);}
 
-  /* CATEGORY CHIPS */
-  .chips{
-    display:flex;gap:8px;overflow-x:auto;padding:14px 18px 4px;
-    scrollbar-width:none;
-  }
-  .chips::-webkit-scrollbar{display:none;}
-  .chip{
-    flex:0 0 auto;padding:8px 14px;border-radius:20px;
-    font-size:13px;font-weight:600;white-space:nowrap;
-    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
-    cursor:pointer;
-  }
-  .chip.active{
-    background:var(--turquoise);color:white;border-color:var(--turquoise);
-  }
+.ob-cards{
+  width:100%;flex:1;display:flex;flex-direction:column;
+  padding:24px 22px calc(40px + var(--safe));
+}
+.ob-card{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:24px;padding:26px 22px;
+  margin-bottom:18px;flex:1;
+  display:flex;flex-direction:column;
+  backdrop-filter:blur(12px);
+}
+.ob-card.off{display:none;}
+.ob-step-label{
+  font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--green);margin-bottom:10px;
+}
+.ob-h{font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.25;}
+.ob-sub{font-size:13.5px;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:20px;}
 
-  /* LIST */
-  .section-title{
-    font-size:13px;font-weight:700;color:var(--ink-soft);
-    text-transform:uppercase;letter-spacing:0.5px;
-    padding:18px 18px 8px;
-  }
-  .list{padding:0 18px;display:flex;flex-direction:column;gap:12px;}
+.ob-field{
+  width:100%;background:rgba(255,255,255,.09);
+  border:1.5px solid rgba(255,255,255,.14);
+  border-radius:12px;padding:14px 16px;
+  font-size:15px;color:#fff;outline:none;
+  font-family:inherit;transition:border-color .2s;
+}
+.ob-field::placeholder{color:rgba(255,255,255,.3);}
+.ob-field:focus{border-color:var(--green);}
+.ob-field+.ob-field{margin-top:10px;}
 
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    overflow:hidden;
-    cursor:pointer;
-    display:flex;
-    transition:transform .12s ease;
-  }
-  .card:active{transform:scale(0.98);}
-  .card-img{
-    width:96px;height:96px;flex:0 0 96px;
-    background-size:cover;background-position:center;
-  }
-  .card-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;}
-  .card-title{font-size:15px;font-weight:700;line-height:1.2;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .card-meta{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:4px;}
-  .card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
-  .card-price{font-size:14px;font-weight:700;color:var(--terracotta-dark);}
-  .card-rating{
-    font-size:12px;font-weight:600;color:var(--turquoise-dark);
-    display:flex;align-items:center;gap:3px;
-  }
-  .badge{
-    display:inline-block;font-size:10.5px;font-weight:700;
-    padding:2px 7px;border-radius:6px;
-    background:#F2EEE3;color:var(--ink-soft);
-    width:fit-content;
-  }
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.rc{
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:16px 12px;
+  text-align:center;cursor:pointer;
+  transition:all .18s;
+}
+.rc.sel{background:rgba(44,199,106,.2);border-color:var(--green);}
+.rc-em{font-size:26px;margin-bottom:7px;}
+.rc-lb{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);}
+.rc.sel .rc-lb{color:var(--green);}
 
-  /* DETAIL VIEW */
-  #detail{
-    position:fixed;inset:0;background:var(--sand);z-index:50;
-    overflow-y:auto;
-  }
-  .detail-hero{
-    height:240px;background-size:cover;background-position:center;
-    position:relative;
-  }
-  .back-btn{
-    position:absolute;top:18px;left:16px;
-    width:36px;height:36px;border-radius:50%;
-    background:rgba(255,255,255,0.92);
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;font-weight:700;cursor:pointer;
-  }
-  .detail-body{padding:20px 20px 110px;}
-  .detail-title{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-0.3px;}
-  .detail-meta{font-size:13.5px;color:var(--ink-soft);margin-bottom:16px;}
-  .detail-stats{
-    display:flex;gap:10px;margin-bottom:18px;
-  }
-  .stat-pill{
-    flex:1;background:var(--card);border:1px solid var(--line);
-    border-radius:12px;padding:10px 12px;text-align:center;
-  }
-  .stat-pill .v{font-size:15px;font-weight:700;}
-  .stat-pill .l{font-size:11px;color:var(--ink-soft);margin-top:2px;}
-  .detail-section{margin-bottom:18px;}
-  .detail-section h3{font-size:14px;font-weight:700;margin-bottom:6px;}
-  .detail-section p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
-  .gallery{display:flex;gap:8px;overflow-x:auto;margin-top:6px;}
-  .gallery div{width:88px;height:88px;border-radius:10px;flex:0 0 88px;background-size:cover;background-position:center;}
+.int-wrap{display:flex;flex-wrap:wrap;gap:8px;}
+.ic{
+  padding:9px 14px;border-radius:22px;
+  border:1.5px solid rgba(255,255,255,.16);
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.7);
+  cursor:pointer;transition:all .16s;
+}
+.ic.sel{background:var(--green);border-color:var(--green);color:#fff;}
 
-  .cta-bar{
-    position:fixed;bottom:0;left:0;right:0;
-    background:var(--card);border-top:1px solid var(--line);
-    padding:14px 20px calc(14px + env(safe-area-inset-bottom));
-    display:flex;align-items:center;gap:14px;
-    z-index:51;
-  }
-  .cta-price{flex:0 0 auto;}
-  .cta-price .v{font-size:17px;font-weight:800;}
-  .cta-price .l{font-size:11px;color:var(--ink-soft);}
-  .cta-btn{
-    flex:1;background:var(--terracotta);color:white;
-    border:none;border-radius:14px;padding:15px;
-    font-size:15px;font-weight:700;cursor:pointer;
-  }
-  .cta-btn:active{background:var(--terracotta-dark);}
+.budget-list{display:flex;flex-direction:column;gap:9px;}
+.bo{
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:13px 16px;
+  display:flex;align-items:center;gap:11px;
+  cursor:pointer;transition:all .18s;
+}
+.bo.sel{background:rgba(44,199,106,.15);border-color:var(--green);}
+.bo-em{font-size:20px;}
+.bo-tx{flex:1;font-size:14px;font-weight:600;color:rgba(255,255,255,.8);}
+.bo.sel .bo-tx{color:#fff;}
+.bo-ck{
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;transition:all .18s;
+}
+.bo.sel .bo-ck{background:var(--green);border-color:var(--green);color:#fff;}
 
-  /* BOOKING CONFIRM */
-  #confirm{
-    position:fixed;inset:0;background:rgba(44,44,42,0.45);
-    z-index:60;display:flex;align-items:flex-end;
-  }
-  .sheet{
-    background:var(--card);width:100%;border-radius:20px 20px 0 0;
-    padding:24px 22px calc(24px + env(safe-area-inset-bottom));
-    text-align:center;
-  }
-  .sheet .icon{
-    width:56px;height:56px;border-radius:50%;background:#E1F5EE;
-    color:var(--turquoise-dark);font-size:26px;font-weight:800;
-    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
-  }
-  .sheet h2{font-size:17px;font-weight:800;margin-bottom:6px;}
-  .sheet p{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;line-height:1.5;}
-  .sheet button{
-    width:100%;padding:14px;border-radius:14px;border:none;
-    background:var(--ink);color:white;font-weight:700;font-size:14.5px;
-    cursor:pointer;
-  }
+.ob-progress{display:flex;gap:5px;justify-content:center;margin:18px 0 14px;}
+.op{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .25s;}
+.op.on{background:var(--green);width:24px;border-radius:4px;}
+
+.ob-btn{
+  width:100%;padding:16px;border-radius:14px;border:none;
+  background:var(--green);color:#fff;
+  font-size:15.5px;font-weight:800;cursor:pointer;
+  font-family:inherit;letter-spacing:-.2px;
+  transition:background .15s,transform .12s;
+  box-shadow:0 4px 18px rgba(44,199,106,.35);
+}
+.ob-btn:active{background:var(--green2);transform:scale(0.98);}
+.ob-skip{
+  text-align:center;margin-top:11px;
+  font-size:13px;color:rgba(255,255,255,.35);cursor:pointer;
+}
+
+/* ════════════════════════════════════
+   MAIN APP SHELL
+════════════════════════════════════ */
+#app{background:var(--bg);}
+.page{display:none;padding-bottom:calc(var(--nav) + 20px + var(--safe));}
+.page.on{display:block;}
+
+/* ── Bottom nav ── */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(var(--nav) + var(--safe));
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  display:flex;align-items:flex-start;justify-content:space-around;
+  padding-top:8px;z-index:200;
+}
+.ni{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;cursor:pointer;padding:4px 0;
+  position:relative;
+}
+.ni-ic{
+  width:42px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:16px;transition:all .18s;font-size:20px;
+}
+.ni.on .ni-ic{background:var(--green-soft);}
+.ni-lb{font-size:10px;font-weight:700;color:var(--ink3);transition:color .18s;letter-spacing:.1px;}
+.ni.on .ni-lb{color:var(--green2);}
+.nbadge{
+  position:absolute;top:2px;left:50%;transform:translateX(4px);
+  background:var(--green);color:#fff;font-size:9px;font-weight:800;
+  min-width:15px;height:15px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;padding:0 3px;
+}
+
+/* ════════════════════════════════════
+   HOME PAGE
+════════════════════════════════════ */
+.h-top{
+  background:var(--navy);
+  padding:52px 20px 22px;
+  position:relative;overflow:hidden;
+}
+.h-top::after{
+  content:'';position:absolute;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(44,199,106,.15) 0%,transparent 70%);
+  top:-60px;right:-40px;pointer-events:none;
+}
+.h-greet{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:3px;font-weight:500;}
+.h-name{font-size:22px;font-weight:900;color:#fff;margin-bottom:18px;letter-spacing:-.4px;}
+.h-search{
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.13);
+  border-radius:14px;display:flex;align-items:center;gap:10px;padding:12px 16px;
+}
+.h-search input{
+  background:transparent;border:none;outline:none;
+  color:#fff;font-size:14px;flex:1;font-family:inherit;
+}
+.h-search input::placeholder{color:rgba(255,255,255,.3);}
+.h-si{color:rgba(255,255,255,.4);font-size:16px;}
+
+.sec{padding:20px 18px 0;}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-t{font-size:16px;font-weight:800;letter-spacing:-.3px;}
+.sec-a{font-size:13px;font-weight:700;color:var(--green2);cursor:pointer;}
+
+/* Horizontal featured */
+.h-scroll{
+  display:flex;gap:12px;overflow-x:auto;padding:0 18px 2px;
+  scrollbar-width:none;
+}
+.h-scroll::-webkit-scrollbar{display:none;}
+.fc{
+  flex:0 0 220px;border-radius:18px;overflow:hidden;
+  position:relative;cursor:pointer;
+  box-shadow:0 4px 16px rgba(22,33,58,.12);
+  transition:transform .15s;
+}
+.fc:active{transform:scale(.97);}
+.fc-img{width:100%;height:148px;background-size:cover;background-position:center;}
+.fc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(22,33,58,.88) 0%,rgba(22,33,58,.1) 55%,transparent 100%);}
+.fc-body{position:absolute;bottom:0;left:0;right:0;padding:14px;}
+.fc-tag{
+  display:inline-block;font-size:10px;font-weight:800;
+  background:var(--green);color:#fff;padding:3px 9px;
+  border-radius:6px;margin-bottom:7px;letter-spacing:.2px;
+}
+.fc-tt{font-size:14px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:3px;}
+.fc-pr{font-size:12px;color:rgba(255,255,255,.65);}
+
+/* Women banner */
+.wb{
+  margin:20px 18px 0;
+  background:linear-gradient(130deg,#4C1D95,var(--women2));
+  border-radius:20px;padding:22px 20px;
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.wb::before{
+  content:'';position:absolute;right:-20px;top:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.wb::after{
+  content:'';position:absolute;right:20px;bottom:-30px;
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,255,255,.04);
+}
+.wb-tag{font-size:10px;font-weight:800;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.wb-t{font-size:20px;font-weight:900;color:#fff;margin-bottom:5px;line-height:1.2;letter-spacing:-.3px;}
+.wb-s{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.45;}
+.wb-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.25);
+  border-radius:10px;padding:9px 16px;
+  font-size:13px;font-weight:700;color:#fff;
+}
+
+/* Stats strip */
+.stats-strip{
+  margin:20px 18px 0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+.stat-box{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:14px 12px;text-align:center;
+}
+.stat-val{font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-.5px;}
+.stat-lbl{font-size:11px;font-weight:600;color:var(--ink3);margin-top:2px;}
+.stat-box.green .stat-val{color:var(--green2);}
+
+/* List card */
+.lc{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:14px;display:flex;overflow:hidden;
+  cursor:pointer;transition:transform .12s;
+}
+.lc:active{transform:scale(.98);}
+.lc-img{width:88px;height:88px;flex:0 0 88px;background-size:cover;background-position:center;}
+.lc-body{padding:12px 13px;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;}
+.lc-cat{font-size:10px;font-weight:800;color:var(--green2);text-transform:uppercase;letter-spacing:.4px;}
+.lc-t{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px;}
+.lc-m{font-size:12px;color:var(--ink3);}
+.lc-bot{display:flex;align-items:center;justify-content:space-between;margin-top:3px;}
+.lc-price{font-size:13px;font-weight:800;color:var(--ink);}
+.lc-r{font-size:12px;font-weight:700;color:var(--green2);}
+.lc-cards{display:flex;flex-direction:column;gap:10px;padding:0 18px;}
+
+/* ════════════════════════════════════
+   EVENTS / ORGANIZERS PAGES
+════════════════════════════════════ */
+.pg-hdr{
+  background:var(--navy);padding:52px 20px 18px;
+}
+.pg-ht{font-size:20px;font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-.4px;}
+.pg-search{
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:13px;display:flex;align-items:center;gap:10px;padding:12px 15px;
+}
+.pg-search input{
+  background:transparent;border:none;outline:none;
+  color:#fff;font-size:14px;flex:1;font-family:inherit;
+}
+.pg-search input::placeholder{color:rgba(255,255,255,.3);}
+.cat-scroll{display:flex;gap:8px;overflow-x:auto;padding:0 18px;margin-top:13px;scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto;padding:8px 15px;border-radius:22px;
+  font-size:13px;font-weight:700;white-space:nowrap;
+  cursor:pointer;transition:all .16s;border:1.5px solid transparent;
+}
+.chip.lt{color:rgba(255,255,255,.65);border-color:rgba(255,255,255,.2);}
+.chip.lt.on{background:var(--green);border-color:var(--green);color:#fff;}
+.chip.dk{color:var(--ink2);border-color:var(--line);background:var(--card);}
+.chip.dk.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+/* Org card */
+.oc{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:14px;display:flex;gap:14px;
+  padding:14px 14px;cursor:pointer;transition:transform .12s;
+}
+.oc:active{transform:scale(.98);}
+.oc-av{
+  width:60px;height:60px;flex:0 0 60px;
+  border-radius:14px;background-size:cover;background-position:center;
+}
+.oc-body{flex:1;min-width:0;}
+.oc-cat{font-size:10px;font-weight:800;color:var(--green2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.oc-nm{font-size:15px;font-weight:800;letter-spacing:-.3px;margin-bottom:3px;}
+.oc-m{font-size:12.5px;color:var(--ink3);margin-bottom:7px;}
+.oc-bot{display:flex;align-items:center;justify-content:space-between;}
+.oc-pr{font-size:13px;font-weight:800;}
+.oc-right{display:flex;align-items:center;gap:7px;}
+.vbadge{
+  font-size:10px;font-weight:800;
+  background:var(--green-soft);color:var(--green2);
+  padding:3px 7px;border-radius:6px;
+}
+.oc-rat{font-size:12px;font-weight:800;color:var(--green2);}
+
+/* ════════════════════════════════════
+   CHAT PAGE
+════════════════════════════════════ */
+.chat-hdr{
+  background:var(--navy);padding:52px 20px 16px;
+  display:flex;align-items:center;gap:13px;
+}
+.chat-av{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--green);display:flex;align-items:center;
+  justify-content:center;font-size:20px;flex:0 0 42px;
+}
+.chat-inf .cn{font-size:16px;font-weight:800;color:#fff;}
+.chat-inf .cs{font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;}
+.chat-status{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);margin-left:auto;
+  flex:0 0 8px;box-shadow:0 0 0 2px rgba(44,199,106,.3);
+}
+.msgs{padding:16px 16px 90px;display:flex;flex-direction:column;gap:10px;}
+.msg-row{display:flex;flex-direction:column;}
+.msg-row.u{align-items:flex-end;}
+.bubble{
+  max-width:82%;padding:11px 14px;
+  border-radius:18px;font-size:14px;line-height:1.5;
+}
+.bubble.b{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:4px 18px 18px 18px;
+  color:var(--ink);
+}
+.bubble.u{
+  background:var(--navy);color:#fff;
+  border-radius:18px 4px 18px 18px;
+}
+.msg-ts{font-size:10px;color:var(--ink3);margin-top:4px;padding:0 3px;}
+.qr-wrap{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 12px;}
+.qr{
+  padding:8px 14px;border-radius:22px;
+  border:1.5px solid var(--green);color:var(--green2);
+  font-size:12.5px;font-weight:700;cursor:pointer;background:var(--card);
+  transition:all .15s;
+}
+.qr:active{background:var(--green);color:#fff;}
+.chat-input-bar{
+  position:fixed;bottom:calc(var(--nav) + var(--safe));
+  left:0;right:0;background:var(--card);
+  border-top:1px solid var(--line);
+  padding:10px 14px;display:flex;gap:10px;align-items:center;
+  z-index:150;
+}
+.chat-inp{
+  flex:1;background:var(--bg);border:1.5px solid var(--line);
+  border-radius:22px;padding:10px 16px;font-size:14px;
+  outline:none;color:var(--ink);font-family:inherit;
+}
+.chat-inp:focus{border-color:var(--green);}
+.chat-snd{
+  width:40px;height:40px;border-radius:50%;background:var(--green);
+  border:none;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:16px;color:#fff;
+  transition:background .15s;flex:0 0 40px;
+}
+.chat-snd:active{background:var(--green2);}
+
+/* ════════════════════════════════════
+   SETTINGS PAGE
+════════════════════════════════════ */
+.set-hdr{
+  background:var(--navy);padding:52px 20px 30px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.set-hdr::after{
+  content:'';position:absolute;left:50%;transform:translateX(-50%);
+  bottom:-60px;width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(44,199,106,.12) 0%,transparent 70%);
+}
+.set-av{
+  width:76px;height:76px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  margin:0 auto 12px;display:flex;align-items:center;
+  justify-content:center;font-size:30px;font-weight:900;color:#fff;
+  box-shadow:0 6px 24px rgba(44,199,106,.35);
+}
+.set-nm{font-size:19px;font-weight:900;color:#fff;letter-spacing:-.4px;}
+.set-sub{font-size:13px;color:rgba(255,255,255,.45);margin-top:4px;}
+
+.set-body{padding:20px 18px;}
+.sg-title{
+  font-size:11px;font-weight:800;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px;
+}
+.sg-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;margin-bottom:22px;
+}
+.sr{
+  display:flex;align-items:center;gap:13px;
+  padding:13px 16px;border-bottom:1px solid var(--line);cursor:pointer;
+}
+.sr:last-child{border-bottom:none;}
+.sri{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex:0 0 34px;
+}
+.sr-lb{flex:1;font-size:14px;font-weight:600;}
+.sr-val{font-size:13px;color:var(--ink3);}
+.sr-arr{color:var(--ink3);font-size:16px;}
+
+.tog{
+  width:44px;height:26px;border-radius:13px;background:var(--line);
+  position:relative;cursor:pointer;transition:background .2s;flex:0 0 44px;
+}
+.tog.on{background:var(--green);}
+.tok{
+  position:absolute;top:3px;left:3px;width:20px;height:20px;
+  border-radius:50%;background:#fff;transition:transform .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+}
+.tog.on .tok{transform:translateX(18px);}
+
+/* Admin stats in settings */
+.admin-strip{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  margin-bottom:22px;
+}
+.adm-box{
+  background:var(--navy);border-radius:14px;padding:16px;
+  text-align:center;
+}
+.adm-val{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;}
+.adm-lbl{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);margin-top:3px;text-transform:uppercase;letter-spacing:.4px;}
+.adm-box.g .adm-val{color:var(--green);}
+
+/* ════════════════════════════════════
+   DETAIL OVERLAY
+════════════════════════════════════ */
+#detail{
+  position:fixed;inset:0;background:var(--bg);z-index:300;
+  transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto;
+}
+#detail.open{transform:translateY(0);}
+.d-hero{
+  height:270px;background-size:cover;background-position:center;
+  position:relative;
+}
+.d-back{
+  position:absolute;top:50px;left:16px;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.9);display:flex;align-items:center;
+  justify-content:center;font-size:18px;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);
+}
+.d-share{
+  position:absolute;top:50px;right:16px;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.9);display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.12);
+}
+.d-content{padding:22px 20px 130px;}
+.d-cat{font-size:11px;font-weight:800;color:var(--green2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.d-title{font-size:23px;font-weight:900;color:var(--ink);margin-bottom:5px;line-height:1.2;letter-spacing:-.4px;}
+.d-loc{font-size:13.5px;color:var(--ink3);margin-bottom:18px;}
+.d-stats{display:flex;gap:8px;margin-bottom:20px;}
+.ds{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 8px;text-align:center;}
+.ds-v{font-size:15px;font-weight:900;color:var(--ink);}
+.ds-l{font-size:10px;color:var(--ink3);margin-top:2px;font-weight:600;}
+.d-desc{font-size:14.5px;color:var(--ink2);line-height:1.65;margin-bottom:22px;}
+.d-sec-t{font-size:14px;font-weight:800;margin-bottom:10px;}
+
+/* What's included tags */
+.inc-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;}
+.inc-t{
+  padding:7px 13px;border-radius:22px;
+  background:var(--green-soft);color:var(--green2);
+  font-size:12.5px;font-weight:700;
+}
+
+.d-cta{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  padding:14px 20px calc(14px + var(--safe));
+  display:flex;align-items:center;gap:16px;z-index:301;
+}
+.d-price .pv{font-size:19px;font-weight:900;letter-spacing:-.4px;}
+.d-price .pl{font-size:11px;color:var(--ink3);font-weight:600;margin-top:1px;}
+.d-book{
+  flex:1;background:var(--navy);color:#fff;border:none;
+  border-radius:14px;padding:16px;font-size:15px;font-weight:800;
+  cursor:pointer;font-family:inherit;letter-spacing:-.2px;
+  transition:background .15s,transform .12s;
+}
+.d-book:active{background:var(--navy2);transform:scale(.98);}
+
+/* ════════════════════════════════════
+   CONFIRM SHEET
+════════════════════════════════════ */
+#cs{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(22,33,58,.5);
+  backdrop-filter:blur(6px);
+  display:flex;align-items:flex-end;
+  opacity:0;pointer-events:none;transition:opacity .22s;
+}
+#cs.open{opacity:1;pointer-events:all;}
+.cs-body{
+  background:var(--card);width:100%;
+  border-radius:24px 24px 0 0;
+  padding:28px 24px calc(32px + var(--safe));
+  text-align:center;
+}
+.cs-icon{
+  width:66px;height:66px;border-radius:50%;
+  background:var(--green-soft);margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+}
+.cs-t{font-size:19px;font-weight:900;margin-bottom:6px;letter-spacing:-.3px;}
+.cs-s{font-size:13.5px;color:var(--ink3);line-height:1.55;margin-bottom:24px;}
+.cs-btn{
+  width:100%;padding:15px;border-radius:14px;
+  border:none;background:var(--navy);color:#fff;
+  font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;
+}
+
+/* ════════════════════════════════════
+   POST EVENT MODAL (for organizers)
+════════════════════════════════════ */
+#post-modal{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(22,33,58,.55);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:flex-end;
+  opacity:0;pointer-events:none;transition:opacity .22s;
+}
+#post-modal.open{opacity:1;pointer-events:all;}
+.pm-body{
+  background:var(--card);width:100%;
+  border-radius:24px 24px 0 0;
+  padding:24px 22px calc(28px + var(--safe));
+  max-height:90vh;overflow-y:auto;
+}
+.pm-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.pm-title{font-size:18px;font-weight:900;letter-spacing:-.3px;}
+.pm-close{
+  width:32px;height:32px;border-radius:50%;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;font-weight:700;color:var(--ink3);
+}
+.pm-field{
+  width:100%;border:1.5px solid var(--line);border-radius:12px;
+  padding:13px 15px;font-size:14.5px;color:var(--ink);
+  outline:none;font-family:inherit;margin-bottom:12px;
+  transition:border-color .2s;background:var(--bg);
+}
+.pm-field:focus{border-color:var(--green);}
+.pm-field.ta{resize:none;height:90px;}
+.pm-label{font-size:12px;font-weight:700;color:var(--ink3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+.pm-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pm-btn{
+  width:100%;padding:15px;border-radius:14px;border:none;
+  background:var(--green);color:#fff;font-size:15px;
+  font-weight:800;cursor:pointer;font-family:inherit;
+  box-shadow:0 4px 16px rgba(44,199,106,.3);
+  margin-top:4px;
+}
+.pm-btn:active{background:var(--green2);}
+
+/* ── Misc ── */
+.sp{height:16px;}
+.empty{text-align:center;padding:48px 20px;color:var(--ink3);font-size:14px;line-height:1.6;}
+.empty-em{font-size:36px;margin-bottom:12px;}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="brand-mark">Y</div>
-    <div class="brand-name">YurUz</div>
-    <div class="brand-tag">Tashkent</div>
+<!-- ══════════════════════════════════════════
+     ONBOARDING
+══════════════════════════════════════════ -->
+<div class="screen" id="ob">
+  <div class="ob-top">
+    <div class="ob-logo-wrap">
+      <img src="logo.png" alt="YurUz" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
+      <div id="logo-fallback" class="ob-logo-text" style="display:none">
+        <span>Yur</span><span>Uz</span>
+      </div>
+    </div>
   </div>
-  <div class="search-bar">
-    <span>🔍</span>
-    <input id="searchInput" placeholder="Search events or organizers" />
-  </div>
-</header>
 
-<div class="tabs">
-  <div class="tab active" data-tab="events">Events</div>
-  <div class="tab" data-tab="organizers">Organizers</div>
+  <div class="ob-progress" id="ob-prog">
+    <div class="op on"></div>
+    <div class="op"></div>
+    <div class="op"></div>
+    <div class="op"></div>
+  </div>
+
+  <div class="ob-cards">
+    <!-- Step 0: Name -->
+    <div class="ob-card" id="obs0">
+      <div class="ob-step-label">Step 1 of 4</div>
+      <div class="ob-h">Welcome to YurUz 👋</div>
+      <div class="ob-sub">Events, trips, and organizers across Uzbekistan — all in one place. Let's get you set up.</div>
+      <input class="ob-field" id="ob-fn" placeholder="First name" autocomplete="given-name"/>
+      <input class="ob-field" id="ob-ln" placeholder="Last name" autocomplete="family-name"/>
+    </div>
+
+    <!-- Step 1: Role -->
+    <div class="ob-card off" id="obs1">
+      <div class="ob-step-label">Step 2 of 4</div>
+      <div class="ob-h">How will you use YurUz?</div>
+      <div class="ob-sub">This helps us personalize your feed. You can always change this later.</div>
+      <div class="role-grid" id="role-grid">
+        <div class="rc" onclick="setRole('attendee',this)">
+          <div class="rc-em">🎟️</div>
+          <div class="rc-lb">Find events</div>
+        </div>
+        <div class="rc" onclick="setRole('organizer',this)">
+          <div class="rc-em">🎪</div>
+          <div class="rc-lb">I'm an organizer</div>
+        </div>
+        <div class="rc" onclick="setRole('trips',this)">
+          <div class="rc-em">✈️</div>
+          <div class="rc-lb">Plan trips</div>
+        </div>
+        <div class="rc" onclick="setRole('both',this)">
+          <div class="rc-em">✨</div>
+          <div class="rc-lb">All of the above</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Interests -->
+    <div class="ob-card off" id="obs2">
+      <div class="ob-step-label">Step 3 of 4</div>
+      <div class="ob-h">What excites you?</div>
+      <div class="ob-sub">Pick everything that interests you. The more you choose, the better your feed.</div>
+      <div class="int-wrap">
+        <div class="ic" onclick="toggleInt(this,'trips')">✈️ Trips</div>
+        <div class="ic" onclick="toggleInt(this,'concerts')">🎵 Concerts</div>
+        <div class="ic" onclick="toggleInt(this,'masterclasses')">🎨 Masterclasses</div>
+        <div class="ic" onclick="toggleInt(this,'women')">💜 Women's events</div>
+        <div class="ic" onclick="toggleInt(this,'festivals')">🎪 Festivals</div>
+        <div class="ic" onclick="toggleInt(this,'sports')">⚽ Sports</div>
+        <div class="ic" onclick="toggleInt(this,'food')">🍜 Food & drink</div>
+        <div class="ic" onclick="toggleInt(this,'business')">💼 Business</div>
+        <div class="ic" onclick="toggleInt(this,'kids')">👶 Kids & family</div>
+        <div class="ic" onclick="toggleInt(this,'wellness')">🧘 Wellness</div>
+        <div class="ic" onclick="toggleInt(this,'art')">🖼️ Art & culture</div>
+        <div class="ic" onclick="toggleInt(this,'nightlife')">🌙 Nightlife</div>
+      </div>
+    </div>
+
+    <!-- Step 3: Budget -->
+    <div class="ob-card off" id="obs3">
+      <div class="ob-step-label">Step 4 of 4</div>
+      <div class="ob-h">Typical event budget?</div>
+      <div class="ob-sub">Just for recommendations — you can always book any event regardless of price.</div>
+      <div class="budget-list">
+        <div class="bo" onclick="setBudget(this,'free')">
+          <div class="bo-em">🎁</div>
+          <div class="bo-tx">Free events only</div>
+          <div class="bo-ck"></div>
+        </div>
+        <div class="bo" onclick="setBudget(this,'low')">
+          <div class="bo-em">💰</div>
+          <div class="bo-tx">Up to 100,000 UZS</div>
+          <div class="bo-ck"></div>
+        </div>
+        <div class="bo" onclick="setBudget(this,'mid')">
+          <div class="bo-em">💳</div>
+          <div class="bo-tx">100,000 – 500,000 UZS</div>
+          <div class="bo-ck"></div>
+        </div>
+        <div class="bo" onclick="setBudget(this,'high')">
+          <div class="bo-em">✨</div>
+          <div class="bo-tx">500,000 UZS and above</div>
+          <div class="bo-ck"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="ob-btn" id="ob-btn" onclick="obNext()">Continue →</button>
+    <div class="ob-skip" id="ob-skip" onclick="obSkip()">Skip for now</div>
+  </div>
 </div>
 
-<div class="chips" id="chips"></div>
+<!-- ══════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════ -->
+<div class="screen off" id="app">
 
-<div class="section-title" id="sectionTitle">Happening this month</div>
-<div class="list" id="list"></div>
+  <!-- ── HOME ── -->
+  <div class="page on" id="pg-home">
+    <div class="h-top">
+      <div class="h-greet" id="h-greet">Good morning,</div>
+      <div class="h-name" id="h-name">Welcome 👋</div>
+      <div class="h-search">
+        <span class="h-si">🔍</span>
+        <input placeholder="Search events, trips, organizers…" oninput="globalSearch(this.value)"/>
+      </div>
+    </div>
 
-<!-- DETAIL -->
-<div id="detail" class="hidden"></div>
+    <div class="sec" style="padding-bottom:0;">
+      <div class="sec-hd">
+        <div class="sec-t">Happening soon</div>
+        <div class="sec-a" onclick="goPage('events')">See all</div>
+      </div>
+    </div>
+    <div class="h-scroll" style="margin-top:12px;" id="feat-scroll"></div>
 
-<!-- CONFIRM SHEET -->
-<div id="confirm" class="hidden">
-  <div class="sheet">
-    <div class="icon">✓</div>
-    <h2>Booking request sent</h2>
-    <p>The organizer will confirm availability and pricing with you directly in this chat within a few hours.</p>
-    <button onclick="closeConfirm()">Done</button>
+    <div style="padding:20px 18px 0;">
+      <div class="wb" onclick="filterWomen()">
+        <div class="wb-tag">💜 Women's Community</div>
+        <div class="wb-t">Women Talks & Circles</div>
+        <div class="wb-s">Inspiring speakers, safe spaces, and real connections across Uzbekistan.</div>
+        <div class="wb-btn">Explore →</div>
+      </div>
+    </div>
+
+    <div class="stats-strip" id="stats-strip">
+      <div class="stat-box green">
+        <div class="stat-val" id="stat-users">—</div>
+        <div class="stat-lbl">Members</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">9</div>
+        <div class="stat-lbl">Events live</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val">6</div>
+        <div class="stat-lbl">Organizers</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-hd">
+        <div class="sec-t">Top organizers</div>
+        <div class="sec-a" onclick="goPage('organizers')">See all</div>
+      </div>
+      <div class="lc-cards" style="padding:0;" id="home-orgs"></div>
+    </div>
+    <div class="sp"></div>
+  </div>
+
+  <!-- ── EVENTS ── -->
+  <div class="page" id="pg-events">
+    <div class="pg-hdr">
+      <div class="pg-ht">Events</div>
+      <div class="pg-search">
+        <span style="color:rgba(255,255,255,.4);font-size:16px;">🔍</span>
+        <input placeholder="Search events…" id="ev-q" oninput="renderEvents()"/>
+      </div>
+      <div class="cat-scroll" id="ev-cats"></div>
+    </div>
+    <div class="sp"></div>
+    <div class="lc-cards" id="ev-list"></div>
+    <div class="sp"></div>
+  </div>
+
+  <!-- ── ORGANIZERS ── -->
+  <div class="page" id="pg-organizers">
+    <div class="pg-hdr">
+      <div class="pg-ht">Find an organizer</div>
+      <div class="pg-search">
+        <span style="color:rgba(255,255,255,.4);font-size:16px;">🔍</span>
+        <input placeholder="Search organizers…" id="og-q" oninput="renderOrgs()"/>
+      </div>
+      <div class="cat-scroll" id="og-cats"></div>
+    </div>
+    <div class="sp"></div>
+    <div class="lc-cards" id="og-list" style="padding:0 18px;"></div>
+    <div class="sp"></div>
+  </div>
+
+  <!-- ── CHAT ── -->
+  <div class="page" id="pg-chat">
+    <div class="chat-hdr">
+      <div class="chat-av">🤖</div>
+      <div class="chat-inf">
+        <div class="cn">YurUz Assistant</div>
+        <div class="cs">Ask me anything about events</div>
+      </div>
+      <div class="chat-status"></div>
+    </div>
+    <div class="msgs" id="msgs"></div>
+    <div class="qr-wrap" id="qr-wrap">
+      <div class="qr" onclick="sendQ('Upcoming events this week')">Upcoming events</div>
+      <div class="qr" onclick="sendQ('Find a wedding organizer')">Wedding organizer</div>
+      <div class="qr" onclick="sendQ('Women community events')">Women's events</div>
+      <div class="qr" onclick="sendQ('Trips from Tashkent')">Trips</div>
+      <div class="qr" onclick="sendQ('Free events near me')">Free events</div>
+    </div>
+    <div class="chat-input-bar">
+      <input class="chat-inp" id="chat-inp" placeholder="Ask about events, trips, organizers…" onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button class="chat-snd" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS ── -->
+  <div class="page" id="pg-settings">
+    <div class="set-hdr">
+      <div class="set-av" id="set-av">Y</div>
+      <div class="set-nm" id="set-nm">Your profile</div>
+      <div class="set-sub" id="set-sub">Event explorer · Tashkent</div>
+    </div>
+    <div class="set-body">
+
+      <!-- Admin stats -->
+      <div class="sg-title">Platform overview</div>
+      <div class="admin-strip">
+        <div class="adm-box g">
+          <div class="adm-val" id="adm-users">—</div>
+          <div class="adm-lbl">Total users</div>
+        </div>
+        <div class="adm-box">
+          <div class="adm-val" id="adm-bookings">—</div>
+          <div class="adm-lbl">Bookings</div>
+        </div>
+        <div class="adm-box" style="grid-column:span 2;background:var(--navy2);">
+          <div class="adm-val" style="font-size:20px;" id="adm-topcat">—</div>
+          <div class="adm-lbl">Most popular category</div>
+        </div>
+      </div>
+
+      <!-- Post an event (organizers) -->
+      <div class="sg-title">Organizer tools</div>
+      <div class="sg-card" style="margin-bottom:22px;">
+        <div class="sr" onclick="openPostModal()">
+          <div class="sri" style="background:#E8F9EE;">📣</div>
+          <div class="sr-lb">Post an event or announcement</div>
+          <div class="sr-arr">›</div>
+        </div>
+        <div class="sr" onclick="openPostModal()">
+          <div class="sri" style="background:#F3EFFE;">🎪</div>
+          <div class="sr-lb">List your organizer profile</div>
+          <div class="sr-arr">›</div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="sg-title">My profile</div>
+      <div class="sg-card">
+        <div class="sr">
+          <div class="sri" style="background:#E8F9EE;">👤</div>
+          <div class="sr-lb">Edit name & photo</div>
+          <div class="sr-arr">›</div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#F3EFFE;">🎯</div>
+          <div class="sr-lb">My interests</div>
+          <div class="sr-val" id="sr-int">—</div>
+          <div class="sr-arr">›</div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#FFF8E6;">💰</div>
+          <div class="sr-lb">Budget range</div>
+          <div class="sr-val" id="sr-bud">—</div>
+          <div class="sr-arr">›</div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#E6F2FF;">🎭</div>
+          <div class="sr-lb">Account type</div>
+          <div class="sr-val" id="sr-role">Explorer</div>
+          <div class="sr-arr">›</div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div class="sg-title">Notifications</div>
+      <div class="sg-card">
+        <div class="sr">
+          <div class="sri" style="background:#E8F9EE;">🔔</div>
+          <div class="sr-lb">New events near me</div>
+          <div class="tog on" id="t1" onclick="this.classList.toggle('on')"><div class="tok"></div></div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#E6F2FF;">📣</div>
+          <div class="sr-lb">Booking updates</div>
+          <div class="tog on" id="t2" onclick="this.classList.toggle('on')"><div class="tok"></div></div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#F3EFFE;">💜</div>
+          <div class="sr-lb">Women's community</div>
+          <div class="tog on" id="t3" onclick="this.classList.toggle('on')"><div class="tok"></div></div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#FFF0EE;">🎟️</div>
+          <div class="sr-lb">Event reminders</div>
+          <div class="tog" id="t4" onclick="this.classList.toggle('on')"><div class="tok"></div></div>
+        </div>
+      </div>
+
+      <!-- App -->
+      <div class="sg-title">App settings</div>
+      <div class="sg-card">
+        <div class="sr">
+          <div class="sri" style="background:#E6F2FF;">🌐</div>
+          <div class="sr-lb">Language</div>
+          <div class="sr-val">English</div>
+          <div class="sr-arr">›</div>
+        </div>
+        <div class="sr">
+          <div class="sri" style="background:#E8F9EE;">📍</div>
+          <div class="sr-lb">City</div>
+          <div class="sr-val">Tashkent</div>
+          <div class="sr-arr">›</div>
+        </div>
+        <div class="sr" onclick="goPage('chat')">
+          <div class="sri" style="background:#FFF8E6;">💬</div>
+          <div class="sr-lb">Help & support</div>
+          <div class="sr-arr">›</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:4px 0 20px;">
+        <div style="font-size:12px;color:var(--ink3);">YurUz v1.0 · Made with ❤️ in Tashkent</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM NAV ── -->
+  <nav class="bnav">
+    <div class="ni on" id="ni-home" onclick="goPage('home')">
+      <div class="ni-ic">🏠</div>
+      <div class="ni-lb">Home</div>
+    </div>
+    <div class="ni" id="ni-events" onclick="goPage('events')">
+      <div class="ni-ic">🎟️</div>
+      <div class="ni-lb">Events</div>
+    </div>
+    <div class="ni" id="ni-organizers" onclick="goPage('organizers')">
+      <div class="ni-ic">🎪</div>
+      <div class="ni-lb">Organizers</div>
+    </div>
+    <div class="ni" id="ni-chat" onclick="goPage('chat')">
+      <div class="ni-ic">💬</div>
+      <div class="ni-lb">Chat</div>
+      <div class="nbadge" id="chat-badge">1</div>
+    </div>
+    <div class="ni" id="ni-settings" onclick="goPage('settings')">
+      <div class="ni-ic">⚙️</div>
+      <div class="ni-lb">Settings</div>
+    </div>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DETAIL OVERLAY
+══════════════════════════════════════════ -->
+<div id="detail">
+  <div id="detail-in"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONFIRM SHEET
+══════════════════════════════════════════ -->
+<div id="cs">
+  <div class="cs-body">
+    <div class="cs-icon">✓</div>
+    <div class="cs-t">You're registered!</div>
+    <div class="cs-s">Your booking request has been sent. The organizer will reach you here in Telegram chat within a few hours to confirm details.</div>
+    <button class="cs-btn" onclick="closeConfirm()">Done</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     POST EVENT MODAL
+══════════════════════════════════════════ -->
+<div id="post-modal">
+  <div class="pm-body">
+    <div class="pm-hd">
+      <div class="pm-title">Post an event</div>
+      <div class="pm-close" onclick="closePostModal()">✕</div>
+    </div>
+    <div class="pm-label">Event title</div>
+    <input class="pm-field" placeholder="e.g. Women's Leadership Talk" id="pm-title"/>
+    <div class="pm-label">Category</div>
+    <select class="pm-field" id="pm-cat">
+      <option>Concerts</option><option>Tours</option><option>Masterclasses</option>
+      <option>Women</option><option>Sports</option><option>Food</option>
+      <option>Business</option><option>Festivals</option>
+    </select>
+    <div class="pm-label">Description</div>
+    <textarea class="pm-field ta" id="pm-desc" placeholder="Tell people what to expect…"></textarea>
+    <div class="pm-row">
+      <div>
+        <div class="pm-label">Date</div>
+        <input class="pm-field" type="date" id="pm-date"/>
+      </div>
+      <div>
+        <div class="pm-label">Price (UZS)</div>
+        <input class="pm-field" placeholder="Free or amount" id="pm-price"/>
+      </div>
+    </div>
+    <div class="pm-label">Location</div>
+    <input class="pm-field" placeholder="City or venue name" id="pm-loc"/>
+    <div class="pm-label">Contact (Telegram / phone)</div>
+    <input class="pm-field" placeholder="@username or +998…" id="pm-contact"/>
+    <button class="pm-btn" onclick="submitEvent()">Submit for review →</button>
   </div>
 </div>
 
 <script>
+/* ─── Telegram init ─── */
 const tg = window.Telegram?.WebApp;
-if(tg){ tg.ready(); tg.expand(); }
+if(tg){ tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#16213A'); }
+const TG_USER = tg?.initDataUnsafe?.user || {};
 
-const EVENT_CATEGORIES = ["All","Concerts","Tours","Festivals","Sports","Workshops"];
-const ORG_CATEGORIES = ["All","Wedding","Corporate","Birthday","Photo & Video","Catering","Decor"];
+/* ─── State ─── */
+const S = {
+  step:0,
+  name: TG_USER.first_name || '',
+  surname: TG_USER.last_name || '',
+  role:'', interests:[], budget:'',
+  evCat:'All', ogCat:'All',
+  bookings: 0,
+  msgs:[{r:'b',t:"Salom! 👋 I'm your YurUz assistant. Ask me about events, organizers, trips, or Women's community gatherings across Uzbekistan."}]
+};
 
+/* ─── Data ─── */
 const EVENTS = [
-  {id:"e1",title:"Silk Road Music Night",cat:"Concerts",city:"Tashkent",date:"Jul 12",price:"120,000 UZS",rating:4.8,
-   img:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400",
-   desc:"An evening of contemporary Uzbek and regional artists performing live in an open-air amphitheater. Food trucks and local craft stalls open from 6pm."},
-  {id:"e2",title:"Samarkand Heritage Tour",cat:"Tours",city:"Samarkand",date:"Jul 18",price:"350,000 UZS",rating:4.9,
-   img:"https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400",
-   desc:"Full-day guided tour of Registan Square, Gur-e-Amir, and Shah-i-Zinda with a licensed local historian. Lunch and transport from Tashkent included."},
-  {id:"e3",title:"Tashkent Food Festival",cat:"Festivals",city:"Tashkent",date:"Jul 20",price:"Free entry",rating:4.6,
-   img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400",
-   desc:"Two-day street food festival featuring 40+ local vendors, live cooking demos, and family activities at Magic City Park."},
-  {id:"e4",title:"Chimgan Trail Run",cat:"Sports",city:"Chimgan",date:"Jul 26",price:"80,000 UZS",rating:4.7,
-   img:"https://images.unsplash.com/photo-1551632811-561732d1e306?w=400",
-   desc:"10K and 21K mountain trail run with marked routes, water stations, and finisher medals. Bus transfer from Tashkent available."},
-  {id:"e5",title:"Startup Pitch Workshop",cat:"Workshops",city:"Tashkent",date:"Aug 2",price:"50,000 UZS",rating:4.5,
-   img:"https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400",
-   desc:"Hands-on workshop on building and delivering investor pitches, led by founders from the local startup ecosystem."},
+  {id:'e1',title:'Silk Road Music Night',cat:'Concerts',city:'Tashkent',date:'Jul 12',price:'120,000 UZS',rating:4.8,img:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500',desc:'An evening of contemporary Uzbek and regional artists performing live at the open-air amphitheater. Food trucks and local craft stalls open from 6pm.',includes:['Live performance','Food trucks','Craft market','Free parking']},
+  {id:'e2',title:'Samarkand Heritage Tour',cat:'Tours',city:'Samarkand',date:'Jul 18',price:'350,000 UZS',rating:4.9,img:'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=500',desc:'Full-day guided tour of Registan Square, Gur-e-Amir, and Shah-i-Zinda with a licensed local historian. Lunch and bus from Tashkent included.',includes:['Licensed guide','Round-trip bus','Lunch','Entry tickets']},
+  {id:'e3',title:'Tashkent Food Festival',cat:'Food',city:'Tashkent',date:'Jul 20',price:'Free entry',rating:4.6,img:'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500',desc:'Two-day street food festival featuring 40+ local vendors, live cooking demos, and family activities at Magic City Park.',includes:['Free entry','40+ vendors','Cooking demos','Family zone']},
+  {id:'e4',title:'Chimgan Trail Run',cat:'Sports',city:'Chimgan',date:'Jul 26',price:'80,000 UZS',rating:4.7,img:'https://images.unsplash.com/photo-1551632811-561732d1e306?w=500',desc:'10K and 21K mountain trail run with marked routes, water stations, and finisher medals. Bus transfer from Tashkent available.',includes:['Marked route','Water stations','Finisher medal','Bus transfer']},
+  {id:'e5',title:'Ceramic Art Workshop',cat:'Masterclasses',city:'Tashkent',date:'Jul 22',price:'75,000 UZS',rating:4.8,img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500',desc:'Hands-on ceramic workshop for beginners and intermediates. All materials provided. Small group of 10 max.',includes:['All materials','Expert instructor','Take home your piece','Max 10 people']},
+  {id:'e6',title:'Women Talks: Leadership',cat:'Women',city:'Tashkent',date:'Jul 15',price:'50,000 UZS',rating:5.0,img:'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=500',desc:'An intimate evening with four inspiring Uzbek women leaders sharing their stories. Open discussion, networking dinner, and a safe space for real talk.',includes:['4 speakers','Networking dinner','Discussion circle','Certificate']},
+  {id:'e7',title:'Bukhara Weekend Trip',cat:'Tours',city:'Bukhara',date:'Aug 2',price:'650,000 UZS',rating:4.9,img:'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=500',desc:'2-night group trip — ancient city walks, local home dinner, sunset at the Ark Citadel. Maximum 12 people for an intimate experience.',includes:['2 nights hotel','All transport','Local guide','Home dinner','Max 12 people']},
+  {id:'e8',title:"Women's Wellness Circle",cat:'Women',city:'Tashkent',date:'Jul 19',price:'40,000 UZS',rating:4.9,img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500',desc:'Guided meditation, breathwork, and sharing circle in a safe, supportive space for women. Herbal tea and light refreshments served.',includes:['Guided meditation','Breathwork','Sharing circle','Tea & refreshments']},
+  {id:'e9',title:'Startup Pitch Workshop',cat:'Business',city:'Tashkent',date:'Aug 5',price:'50,000 UZS',rating:4.5,img:'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=500',desc:'Hands-on workshop on building and delivering investor pitches, led by Uzbek startup founders with real funding experience.',includes:['Expert mentors','Pitch practice','Feedback session','Networking']},
 ];
 
 const ORGANIZERS = [
-  {id:"o1",title:"Bahor Wedding Studio",cat:"Wedding",city:"Tashkent",date:"From 8,000,000 UZS",price:"4.9 (210 events)",rating:4.9,
-   img:"https://images.unsplash.com/photo-1519741497674-611481863552?w=400",
-   desc:"Full-service wedding planning: venue sourcing, decor, catering coordination, and day-of management. 8 years organizing weddings across Tashkent."},
-  {id:"o2",title:"Nova Corporate Events",cat:"Corporate",city:"Tashkent",date:"From 5,000,000 UZS",price:"4.8 (95 events)",rating:4.8,
-   img:"https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400",
-   desc:"Conferences, product launches, and team offsites. In-house AV, staging, and catering partners for events up to 500 guests."},
-  {id:"o3",title:"Sayyora Kids Parties",cat:"Birthday",city:"Tashkent",date:"From 1,200,000 UZS",price:"5.0 (340 events)",rating:5.0,
-   img:"https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400",
-   desc:"Themed birthday parties for kids with entertainers, decor, and cake included. Most popular vendor on YurUz for family events."},
-  {id:"o4",title:"Lens & Light Studio",cat:"Photo & Video",city:"Tashkent",date:"From 900,000 UZS",price:"4.7 (180 events)",rating:4.7,
-   img:"https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400",
-   desc:"Photo and videography for weddings, toy, and corporate events. Same-week edited highlight reel delivery."},
-  {id:"o5",title:"Dastархон Catering",cat:"Catering",city:"Tashkent",date:"From 60,000 UZS / guest",price:"4.6 (260 events)",rating:4.6,
-   img:"https://images.unsplash.com/photo-1555244162-803834f70033?w=400",
-   desc:"Traditional and modern Uzbek menus for events of any size, from intimate gatherings to 500-guest celebrations."},
+  {id:'o1',title:'Bahor Wedding Studio',cat:'Wedding',city:'Tashkent',price:'From 8,000,000 UZS',rating:4.9,events:210,img:'https://images.unsplash.com/photo-1519741497674-611481863552?w=500',desc:'Full-service wedding planning — venue, decor, catering, day-of management. 8 years of experience across Tashkent.',includes:['Venue sourcing','Full decor','Catering coordination','Day-of management']},
+  {id:'o2',title:'Nova Corporate Events',cat:'Corporate',city:'Tashkent',price:'From 5,000,000 UZS',rating:4.8,events:95,img:'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500',desc:'Conferences, product launches, and offsites. In-house AV, staging, and catering for events up to 500 guests.',includes:['AV & staging','Catering partners','Up to 500 guests','Event MC']},
+  {id:'o3',title:'Sayyora Kids Parties',cat:'Birthday',city:'Tashkent',price:'From 1,200,000 UZS',rating:5.0,events:340,img:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500',desc:'Themed birthday parties with entertainers, full decor, and custom cakes. The most-booked family vendor on YurUz.',includes:['Theme decor','Entertainers','Custom cake','Photography']},
+  {id:'o4',title:'Lens & Light Studio',cat:'Photo & Video',city:'Tashkent',price:'From 900,000 UZS',rating:4.7,events:180,img:'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=500',desc:'Photo and video for weddings, toy, and corporate events. Same-week edited highlight reel guaranteed.',includes:['Photo + video','Edited reel (1 week)','Online gallery','Printed album option']},
+  {id:'o5',title:'Dastarxon Catering',cat:'Catering',city:'Tashkent',price:'From 60,000 UZS/guest',rating:4.6,events:260,img:'https://images.unsplash.com/photo-1555244162-803834f70033?w=500',desc:'Traditional and modern Uzbek menus for any size event, from intimate gatherings to 500-guest celebrations.',includes:['Uzbek & modern menus','Full setup & service','Custom menu options','All sizes welcome']},
+  {id:'o6',title:'Zulfiya Decor Studio',cat:'Decor',city:'Tashkent',price:'From 2,500,000 UZS',rating:4.9,events:130,img:'https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=500',desc:'Bespoke event decoration for weddings, toy, and corporate. Specializes in Uzbek-modern fusion aesthetics.',includes:['Custom concept','Full installation','Florals & lighting','Cleanup included']},
 ];
 
-let state = { tab:"events", category:"All", query:"" };
+const EV_CATS = ['All','Concerts','Tours','Masterclasses','Women','Sports','Food','Business','Festivals'];
+const OG_CATS = ['All','Wedding','Corporate','Birthday','Photo & Video','Catering','Decor'];
 
-function renderChips(){
-  const cats = state.tab === "events" ? EVENT_CATEGORIES : ORG_CATEGORIES;
-  document.getElementById("chips").innerHTML = cats.map(c =>
-    `<div class="chip ${c===state.category?'active':''}" onclick="setCategory('${c}')">${c}</div>`
-  ).join("");
-}
+/* ─── Onboarding ─── */
+const STEPS = 4;
+let userCount = Math.floor(Math.random()*180)+420; // simulated, replace with real API
 
-function setCategory(c){ state.category = c; renderChips(); renderList(); }
-
-function setTab(t){
-  state.tab = t; state.category = "All";
-  document.querySelectorAll(".tab").forEach(el=>el.classList.toggle("active", el.dataset.tab===t));
-  document.getElementById("sectionTitle").textContent = t==="events" ? "Happening this month" : "Top-rated organizers";
-  renderChips(); renderList();
-}
-
-function renderList(){
-  const data = state.tab === "events" ? EVENTS : ORGANIZERS;
-  const filtered = data.filter(item=>{
-    const matchCat = state.category==="All" || item.cat===state.category;
-    const matchQuery = item.title.toLowerCase().includes(state.query.toLowerCase());
-    return matchCat && matchQuery;
-  });
-  const list = document.getElementById("list");
-  if(filtered.length===0){
-    list.innerHTML = `<div style="text-align:center;color:var(--ink-soft);font-size:13.5px;padding:40px 0;">No results. Try another category.</div>`;
-    return;
+function obNext(){
+  if(S.step===0){
+    S.name = document.getElementById('ob-fn').value.trim() || TG_USER.first_name || '';
+    S.surname = document.getElementById('ob-ln').value.trim() || TG_USER.last_name || '';
   }
-  list.innerHTML = filtered.map(item => `
-    <div class="card" onclick="openDetail('${item.id}')">
-      <div class="card-img" style="background-image:url('${item.img}')"></div>
-      <div class="card-body">
-        <span class="badge">${item.cat}</span>
-        <div class="card-title">${item.title}</div>
-        <div class="card-meta">📍 ${item.city} · ${item.date}</div>
-        <div class="card-bottom">
-          <div class="card-price">${item.price}</div>
-          <div class="card-rating">★ ${item.rating}</div>
-        </div>
-      </div>
-    </div>
-  `).join("");
+  if(S.step < STEPS-1){
+    document.getElementById('obs'+S.step).classList.add('off');
+    S.step++;
+    document.getElementById('obs'+S.step).classList.remove('off');
+    updateProg();
+    if(S.step === STEPS-1){
+      document.getElementById('ob-btn').textContent = "Let's go 🎉";
+    }
+  } else {
+    launchApp();
+  }
+}
+function obSkip(){ launchApp(); }
+function updateProg(){
+  document.querySelectorAll('.op').forEach((d,i)=>d.classList.toggle('on',i<=S.step));
+}
+function setRole(r,el){
+  S.role=r;
+  document.querySelectorAll('.rc').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function toggleInt(el,v){
+  el.classList.toggle('sel');
+  const i=S.interests.indexOf(v);
+  i>-1?S.interests.splice(i,1):S.interests.push(v);
+}
+function setBudget(el,v){
+  S.budget=v;
+  document.querySelectorAll('.bo').forEach(b=>{b.classList.remove('sel');b.querySelector('.bo-ck').textContent='';});
+  el.classList.add('sel');
+  el.querySelector('.bo-ck').textContent='✓';
 }
 
-function openDetail(id){
-  const data = state.tab === "events" ? EVENTS : ORGANIZERS;
-  const item = data.find(d=>d.id===id);
-  const isOrg = state.tab === "organizers";
-  document.getElementById("detail").innerHTML = `
-    <div class="detail-hero" style="background-image:url('${item.img}')">
-      <div class="back-btn" onclick="closeDetail()">←</div>
+/* prefill from Telegram */
+if(TG_USER.first_name) document.getElementById('ob-fn').value = TG_USER.first_name;
+if(TG_USER.last_name)  document.getElementById('ob-ln').value = TG_USER.last_name;
+
+/* ─── Launch app ─── */
+function launchApp(){
+  document.getElementById('ob').classList.add('off');
+  document.getElementById('app').classList.remove('off');
+  initApp();
+}
+
+function initApp(){
+  const n = S.name || 'friend';
+  const h = new Date().getHours();
+  const g = h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('h-greet').textContent = g+',';
+  document.getElementById('h-name').textContent = n+' 👋';
+
+  const full = (S.name+' '+(S.surname||'')).trim() || 'Your profile';
+  document.getElementById('set-nm').textContent = full;
+  document.getElementById('set-av').textContent = (S.name||'Y')[0].toUpperCase();
+  const RM = {attendee:'Event explorer',organizer:'Event organizer',trips:'Trip planner',both:'Explorer & organizer','':"Event explorer"};
+  document.getElementById('set-sub').textContent = (RM[S.role]||'Event explorer')+' · Tashkent';
+  document.getElementById('sr-int').textContent = S.interests.length ? S.interests.length+' selected' : '—';
+  const BM = {free:'Free only',low:'Up to 100k',mid:'100–500k',high:'500k+','':"—"};
+  document.getElementById('sr-bud').textContent = BM[S.budget]||'—';
+  document.getElementById('sr-role').textContent = RM[S.role]||'Explorer';
+
+  userCount++;
+  document.getElementById('stat-users').textContent = userCount.toLocaleString();
+  document.getElementById('adm-users').textContent = userCount.toLocaleString();
+  document.getElementById('adm-bookings').textContent = S.bookings;
+  document.getElementById('adm-topcat').textContent = '💜 Women\'s Events';
+
+  buildEvenChips(); buildOrgChips();
+  renderEvents(); renderOrgs(); renderHomeOrgs();
+  renderChat();
+}
+
+/* ─── Navigation ─── */
+function goPage(p){
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('pg-'+p).classList.add('on');
+  document.getElementById('ni-'+p).classList.add('on');
+  if(p==='chat') document.getElementById('chat-badge').style.display='none';
+}
+
+/* ─── Events ─── */
+function buildEvenChips(){
+  document.getElementById('ev-cats').innerHTML = EV_CATS.map(c=>
+    `<div class="chip lt ${c===S.evCat?'on':''}" onclick="setEvCat('${c}')">${c}</div>`
+  ).join('');
+}
+function setEvCat(c){ S.evCat=c; buildEvenChips(); renderEvents(); }
+function renderEvents(){
+  const q=(document.getElementById('ev-q')||{value:''}).value.toLowerCase();
+  const f=EVENTS.filter(e=>(S.evCat==='All'||e.cat===S.evCat)&&(!q||e.title.toLowerCase().includes(q)||e.city.toLowerCase().includes(q)));
+  document.getElementById('ev-list').innerHTML = f.length ? f.map(evCard).join('') : '<div class="empty"><div class="empty-em">🔍</div>No events found.<br>Try a different search or category.</div>';
+}
+function evCard(e){
+  const w=e.cat==='Women';
+  return `<div class="lc" onclick="openDetail('${e.id}')">
+    <div class="lc-img" style="background-image:url('${e.img}')"></div>
+    <div class="lc-body">
+      <div class="lc-cat" style="${w?'color:#6D28D9':''}">${e.cat}</div>
+      <div class="lc-t">${e.title}</div>
+      <div class="lc-m">📍 ${e.city} · ${e.date}</div>
+      <div class="lc-bot"><div class="lc-price">${e.price}</div><div class="lc-r">★ ${e.rating}</div></div>
     </div>
-    <div class="detail-body">
-      <div class="detail-title">${item.title}</div>
-      <div class="detail-meta">📍 ${item.city} · ${item.cat}${isOrg ? '' : ' · ' + item.date}</div>
-      <div class="detail-stats">
-        <div class="stat-pill"><div class="v">★ ${item.rating}</div><div class="l">Rating</div></div>
-        <div class="stat-pill"><div class="v">${isOrg ? item.price.split(' ')[0] : item.date}</div><div class="l">${isOrg ? 'Reviews' : 'Date'}</div></div>
-        <div class="stat-pill"><div class="v">${isOrg ? 'Verified' : 'Open'}</div><div class="l">Status</div></div>
-      </div>
-      <div class="detail-section">
-        <h3>About</h3>
-        <p>${item.desc}</p>
-      </div>
-      <div class="detail-section">
-        <h3>Gallery</h3>
-        <div class="gallery">
-          <div style="background-image:url('${item.img}')"></div>
-          <div style="background-image:url('${item.img}')"></div>
-          <div style="background-image:url('${item.img}')"></div>
+  </div>`;
+}
+
+/* ─── Organizers ─── */
+function buildOrgChips(){
+  document.getElementById('og-cats').innerHTML = OG_CATS.map(c=>
+    `<div class="chip lt ${c===S.ogCat?'on':''}" onclick="setOgCat('${c}')">${c}</div>`
+  ).join('');
+}
+function setOgCat(c){ S.ogCat=c; buildOrgChips(); renderOrgs(); }
+function renderOrgs(){
+  const q=(document.getElementById('og-q')||{value:''}).value.toLowerCase();
+  const f=ORGANIZERS.filter(o=>(S.ogCat==='All'||o.cat===S.ogCat)&&(!q||o.title.toLowerCase().includes(q)||o.cat.toLowerCase().includes(q)));
+  document.getElementById('og-list').innerHTML = f.length ? f.map(o=>`
+    <div class="oc" onclick="openDetail('${o.id}')">
+      <div class="oc-av" style="background-image:url('${o.img}')"></div>
+      <div class="oc-body">
+        <div class="oc-cat">${o.cat}</div>
+        <div class="oc-nm">${o.title}</div>
+        <div class="oc-m">📍 ${o.city} · ${o.events} events</div>
+        <div class="oc-bot">
+          <div class="oc-pr">${o.price}</div>
+          <div class="oc-right"><span class="vbadge">✓ Verified</span><span class="oc-rat">★ ${o.rating}</span></div>
         </div>
       </div>
-    </div>
-    <div class="cta-bar">
-      <div class="cta-price">
-        <div class="v">${item.price}</div>
-        <div class="l">${isOrg ? 'starting price' : 'per ticket'}</div>
+    </div>`).join('') : '<div class="empty"><div class="empty-em">🔍</div>No organizers found.</div>';
+}
+
+function renderHomeOrgs(){
+  document.getElementById('home-orgs').innerHTML = ORGANIZERS.slice(0,3).map(o=>`
+    <div class="lc" onclick="openDetail('${o.id}')">
+      <div class="lc-img" style="background-image:url('${o.img}')"></div>
+      <div class="lc-body">
+        <div class="lc-cat">${o.cat}</div>
+        <div class="lc-t">${o.title}</div>
+        <div class="lc-m">📍 ${o.city} · ${o.events} events</div>
+        <div class="lc-bot"><div class="lc-price">${o.price}</div><div class="lc-r">★ ${o.rating}</div></div>
       </div>
-      <button class="cta-btn" onclick="book('${item.id}')">${isOrg ? 'Request booking' : 'Book ticket'}</button>
+    </div>`).join('');
+}
+
+/* Featured cards */
+function buildFeat(){
+  const feat = [EVENTS[0],EVENTS[1],EVENTS[4],EVENTS[5],EVENTS[6]];
+  document.getElementById('feat-scroll').innerHTML = feat.map(e=>`
+    <div class="fc" onclick="openDetail('${e.id}')">
+      <div class="fc-img" style="background-image:url('${e.img}')"></div>
+      <div class="fc-ov"></div>
+      <div class="fc-body">
+        <div class="fc-tag">${e.cat}</div>
+        <div class="fc-tt">${e.title}</div>
+        <div class="fc-pr">${e.price} · ${e.date}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ─── Women filter ─── */
+function filterWomen(){ goPage('events'); setEvCat('Women'); }
+
+/* ─── Global search ─── */
+function globalSearch(v){
+  if(!v) return;
+  goPage('events');
+  document.getElementById('ev-q').value=v;
+  renderEvents();
+}
+
+/* ─── Detail ─── */
+function openDetail(id){
+  const all=[...EVENTS,...ORGANIZERS];
+  const item=all.find(x=>x.id===id);
+  const isOrg=id.startsWith('o');
+  const isW=item.cat==='Women';
+  document.getElementById('detail-in').innerHTML=`
+    <div class="d-hero" style="background-image:url('${item.img}')">
+      <div class="d-back" onclick="closeDetail()">←</div>
+      <div class="d-share">↗</div>
+    </div>
+    <div class="d-content">
+      <div class="d-cat" style="${isW?'color:#6D28D9':''}">${item.cat}</div>
+      <div class="d-title">${item.title}</div>
+      <div class="d-loc">📍 ${item.city} · ${isOrg?item.events+' events completed':item.date}</div>
+      <div class="d-stats">
+        <div class="ds"><div class="ds-v">★${item.rating}</div><div class="ds-l">Rating</div></div>
+        <div class="ds"><div class="ds-v">${isOrg?'✓ Verified':item.date}</div><div class="ds-l">${isOrg?'Status':'Date'}</div></div>
+        <div class="ds"><div class="ds-v">${isOrg?item.events+'+':(item.price==='Free entry'?'Free':'Ticketed')}</div><div class="ds-l">${isOrg?'Events':'Entry'}</div></div>
+      </div>
+      <div class="d-desc">${item.desc}</div>
+      ${item.includes?`<div class="d-sec-t">What's included</div>
+      <div class="inc-tags">${item.includes.map(x=>`<div class="inc-t">✓ ${x}</div>`).join('')}</div>`:''}
+    </div>
+    <div class="d-cta">
+      <div class="d-price">
+        <div class="pv">${item.price}</div>
+        <div class="pl">${isOrg?'starting price':'per person'}</div>
+      </div>
+      <button class="d-book" onclick="book('${id}')">${isOrg?'Request booking':'Register now'}</button>
     </div>
   `;
-  document.getElementById("detail").classList.remove("hidden");
+  document.getElementById('detail').classList.add('open');
 }
+function closeDetail(){ document.getElementById('detail').classList.remove('open'); }
 
-function closeDetail(){ document.getElementById("detail").classList.add("hidden"); }
-
+/* ─── Booking ─── */
 function book(id){
-  if(tg && tg.sendData){
-    tg.sendData(JSON.stringify({action:"book", id:id, tab:state.tab}));
-  }
-  document.getElementById("confirm").classList.remove("hidden");
+  S.bookings++;
+  document.getElementById('adm-bookings').textContent = S.bookings;
+  if(tg?.sendData) tg.sendData(JSON.stringify({action:'book',id,tab:id.startsWith('o')?'organizer':'event',user:S.name}));
+  document.getElementById('cs').classList.add('open');
 }
 function closeConfirm(){
-  document.getElementById("confirm").classList.add("hidden");
+  document.getElementById('cs').classList.remove('open');
   closeDetail();
 }
 
-document.querySelectorAll(".tab").forEach(el=>{
-  el.addEventListener("click", ()=> setTab(el.dataset.tab));
-});
-document.getElementById("searchInput").addEventListener("input", e=>{
-  state.query = e.target.value; renderList();
-});
+/* ─── Post event modal ─── */
+function openPostModal(){ document.getElementById('post-modal').classList.add('open'); }
+function closePostModal(){ document.getElementById('post-modal').classList.remove('open'); }
+function submitEvent(){
+  const t=document.getElementById('pm-title').value.trim();
+  if(!t){ alert('Please add an event title.'); return; }
+  if(tg?.sendData) tg.sendData(JSON.stringify({
+    action:'post_event',
+    title:t,
+    cat:document.getElementById('pm-cat').value,
+    desc:document.getElementById('pm-desc').value,
+    date:document.getElementById('pm-date').value,
+    price:document.getElementById('pm-price').value,
+    location:document.getElementById('pm-loc').value,
+    contact:document.getElementById('pm-contact').value,
+    submittedBy:S.name
+  }));
+  closePostModal();
+  alert('✓ Submitted! We\'ll review and publish your event within 24 hours.');
+}
 
-renderChips();
-renderList();
+/* ─── Chat ─── */
+const BOT = {
+  default:"I can help you find events, trips, organizers, or women's community gatherings. What are you looking for? 🎯",
+  events:"We have upcoming concerts, masterclasses, food festivals and more! Head to the Events tab and browse by category. 🎟️",
+  wedding:"Great choice! Check out Bahor Wedding Studio (⭐4.9, 210 events) and Zulfiya Decor Studio in the Organizers tab — both are top-rated in Tashkent. 💍",
+  women:"Our Women's Community section has talks, wellness circles, and leadership events. Tap the purple banner on the home screen to see all women's events! 💜",
+  trips:"We have trips to Samarkand, Bukhara, Chimgan and more. Open the Events tab and select 'Tours' — next one leaves Jul 18! ✈️",
+  free:"Yes! The Tashkent Food Festival on Jul 20 is completely free. Open Events and filter by any category to see free options. 🎁",
+  masterclass:"We have a Ceramic Art Workshop on Jul 22 in Tashkent — only 10 spots, 75,000 UZS. Tap Events → Masterclasses to book! 🎨",
+};
+function getReply(m){
+  const l=m.toLowerCase();
+  if(l.includes('trip')||l.includes('tour')||l.includes('travel')||l.includes('samarkand')||l.includes('bukhara')) return BOT.trips;
+  if(l.includes('women')||l.includes('girl')||l.includes('female')||l.includes('circle')||l.includes('talk')) return BOT.women;
+  if(l.includes('wedding')||l.includes('nikoh')||l.includes('toy')||l.includes('decor')) return BOT.wedding;
+  if(l.includes('free')) return BOT.free;
+  if(l.includes('master')||l.includes('workshop')||l.includes('class')||l.includes('ceramic')) return BOT.masterclass;
+  if(l.includes('event')||l.includes('concert')||l.includes('festival')||l.includes('upcoming')) return BOT.events;
+  return BOT.default;
+}
+function renderChat(){
+  const el=document.getElementById('msgs');
+  el.innerHTML=S.msgs.map(m=>`
+    <div class="msg-row ${m.r}">
+      <div class="bubble ${m.r}">${m.t}</div>
+    </div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('chat-inp');
+  const txt=inp.value.trim();
+  if(!txt) return;
+  S.msgs.push({r:'u',t:txt}); inp.value='';
+  document.getElementById('qr-wrap').style.display='none';
+  renderChat();
+  setTimeout(()=>{ S.msgs.push({r:'b',t:getReply(txt)}); renderChat(); },650);
+}
+function sendQ(t){
+  S.msgs.push({r:'u',t});
+  document.getElementById('qr-wrap').style.display='none';
+  renderChat();
+  setTimeout(()=>{ S.msgs.push({r:'b',t:getReply(t)}); renderChat(); },650);
+}
+
+/* ─── Boot ─── */
+buildFeat();
 </script>
 </body>
 </html>
